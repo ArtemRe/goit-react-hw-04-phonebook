@@ -1,41 +1,41 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid';
 import { ContactsWrapp } from './ContactForm.module';
 
-export default class FormAddContacts extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
+export default function FormAddContacts({addContact }) {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  nameId = nanoid();
-  numberId = nanoid();
-
-  handelChange = e => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  };
-
-  handleSubmit = e => {
-    e.preventDefault();
-    const { name, number } = this.state;
-    this.props.addContact({ name, number });
-    this.setState({ name: '', number: '' });
-  };
-
+const nameId = nanoid();
+const numberId = nanoid();
   
+  const handelChange = e => {
+    const { name, value } = e.target;
 
-  render() {
-    const { nameId, numberId, handelChange, handleSubmit } = this;
+    switch (name) {
+      case 'name':
+        return setName(value);
+      case 'number':
+        return setNumber(value);
+      default:
+        return;
+    }
+  };
 
-    return (
+ const handleSubmit = e => {
+    e.preventDefault();
+    addContact({ name, number });
+    setName('');
+    setNumber('');
+  };
+  return  (
       <ContactsWrapp>
         <form onSubmit={handleSubmit}>
           <div className="contacts__name">
             <label htmlFor={nameId}>Name</label>
             <input
               id={nameId}
-              value={this.state.name}
+              value={name}
               onChange={handelChange}
               type="text"
               name="name"
@@ -49,7 +49,7 @@ export default class FormAddContacts extends Component {
             <label htmlFor={numberId}>Number</label>
             <input
               id={numberId}
-              value={this.state.number}
+              value={number}
               onChange={handelChange}
               type="tel"
               name="number"
@@ -62,5 +62,12 @@ export default class FormAddContacts extends Component {
         </form>
       </ContactsWrapp>
     );
-  }
+
+
+
+
+
+
+
+
 }
